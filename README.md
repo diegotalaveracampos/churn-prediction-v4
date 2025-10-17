@@ -2,11 +2,10 @@
 
 **A comprehensive Machine Learning application built with Streamlit that predicts customer churn in telecommunications companies.** This project demonstrates a complete Data Science workflow, providing an interactive dashboard for real-time predictions and actionable business analysis.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](Replace with your actual Streamlit Cloud URL after deployment)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%252B-blue)](https://www.python.org/)
 [![Machine Learning](https://img.shields.io/badge/Machine-Learning-orange)](https://en.wikipedia.org/wiki/Machine_learning)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-Open%2520Source-blue?logo=github)](https://github.com/yourusername/churn-prediction)
+[![GitHub](https://img.shields.io/badge/GitHub-blue?logo=github)](https://github.com/diegotalaveracampos/churn-prediction-v4)
 
 ***
 
@@ -34,8 +33,8 @@ This application helps telecommunications companies **proactively identify custo
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/diegotalaveracampos/churn-prediction-v4](https://github.com/diegotalaveracampos/churn-prediction-v4)
-    cd churn-prediction
+    git clone https://github.com/diegotalaveracampos/churn-prediction-v4
+    cd churn-prediction-v4
     ```
 
 2.  **Install dependencies:**
@@ -46,11 +45,6 @@ This application helps telecommunications companies **proactively identify custo
 3.  **Run the complete project setup** (trains the model and saves the necessary `.pkl` files):
     ```bash
     python run_project.py
-    ```
-
-4.  **Launch the interactive Streamlit dashboard:**
-    ```bash
-    streamlit run app/streamlit_app.py
     ```
 
 ***

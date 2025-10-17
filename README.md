@@ -2,7 +2,7 @@
 
 **A comprehensive Machine Learning application built with Streamlit that predicts customer churn in telecommunications companies.** This project demonstrates a complete Data Science workflow, providing an interactive dashboard for real-time predictions and actionable business analysis.
 
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9%252B-blue)](https://www.python.org/)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9-blue)](https://www.python.org/)
 [![Machine Learning](https://img.shields.io/badge/Machine-Learning-orange)](https://en.wikipedia.org/wiki/Machine_learning)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-blue?logo=github)](https://github.com/diegotalaveracampos/churn-prediction-v4)

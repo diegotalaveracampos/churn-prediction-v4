@@ -3,10 +3,6 @@
 Automation script for the Churn Prediction project
 """
 
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-
 import subprocess
 import sys
 import os
@@ -19,6 +15,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve, precision_recall_curve
+import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import warnings
@@ -207,14 +204,12 @@ def run_eda_analysis():
         print(f"❌ Error in exploratory analysis: {e}")
         return False
 
-
 def run_model_training():
     """Execute model training directly"""
     print("\n🤖 Training Machine Learning models...")
     
     try:
-        # Import the processor directly
-        from src.data_processing import DataProcessor, get_processed_data
+        from src.data_processing import get_processed_data
         
         # Load and process data
         print("📥 Loading and processing data...")
@@ -230,7 +225,6 @@ def run_model_training():
         print(f"📊 Training data: {X_train.shape}")
         print(f"📈 Test data: {X_test.shape}")
         print(f"🎯 Features: {len(feature_names)}")
-        print(f"📋 Feature names: {feature_names}")
         
         # Define and train models
         models = {
@@ -362,6 +356,7 @@ def create_model_visualizations(results, best_model_name, X_test, y_test):
         best_model = results[best_model_name]['model']
         if hasattr(best_model, 'feature_importances_'):
             feature_importances = best_model.feature_importances_
+            # Create generic feature names if not available
             feature_names = [f'Feature {i+1}' for i in range(len(feature_importances))]
             
             # Sort features by importance
@@ -369,7 +364,7 @@ def create_model_visualizations(results, best_model_name, X_test, y_test):
             sorted_features = [feature_names[i] for i in indices]
             sorted_importances = feature_importances[indices]
             
-            axes[1,1].barh(range(len(sorted_importances)), sorted_importances[:10])
+            axes[1,1].barh(range(len(sorted_importances[:10])), sorted_importances[:10])
             axes[1,1].set_yticks(range(len(sorted_importances[:10])))
             axes[1,1].set_yticklabels(sorted_features[:10])
             axes[1,1].set_xlabel('Importance')
@@ -383,7 +378,6 @@ def create_model_visualizations(results, best_model_name, X_test, y_test):
         
     except Exception as e:
         print(f"⚠️ Error creating visualizations: {e}")
-
 
 def run_streamlit_app():
     """Execute Streamlit application"""
@@ -444,7 +438,7 @@ def main():
     print("\n" + "="*60)
     user_input = input("Do you want to start the Streamlit application? (y/n): ")
     
-    if user_input.lower() in ['s', 'si', 'sí', 'y', 'yes']: # Keeping the Spanish options 's' and 'sí' just in case, but English user should use 'y' or 'yes'
+    if user_input.lower() in ['y', 'yes']:
         run_streamlit_app()
     else:
         print("\n🎉 Project configured successfully!")
@@ -453,7 +447,7 @@ def main():
         print("   - notebooks/model_results.png (Model Results)")
         print("   - models/ (Trained Models)")
         print("\n🚀 To start Streamlit manually:")
-        print("   python -m streamlit run app/streamlit_app.py")
+        print("   streamlit run app/streamlit_app.py")
 
 if __name__ == "__main__":
     try:

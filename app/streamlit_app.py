@@ -11,17 +11,23 @@ import sys
 import os
 import joblib
 
-# 🎯 CONFIGURACIÓN PARA STREAMLIT CLOUD
+# 🎯 SOLUCIÓN ESPECÍFICA PARA TU REPOSITORIO
 try:
-    # Intenta importación directa (para Streamlit Cloud)
-    from src.data_processing import DataProcessor
-except ImportError:
+    # Ruta exacta para Streamlit Cloud
+    sys.path.append('/mount/src/diegotalaveracampos/churn-prediction-v2/src')
+    from data_processing import DataProcessor
+    st.success("✅ DataProcessor imported successfully from src")
+except ImportError as e:
     try:
-        # Intenta importar desde src (para desarrollo local)
-        sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+        # Fallback: importación relativa
+        current_dir = os.path.dirname(__file__)
+        src_path = os.path.join(current_dir, '..', 'src')
+        sys.path.append(src_path)
         from data_processing import DataProcessor
+        st.success("✅ DataProcessor imported via relative path")
     except ImportError:
-        # Fallback al mock
+        # Fallback final: Mock
+        st.warning("⚠️ Using mock DataProcessor")
         class DataProcessor:
             def __init__(self):
                 self.scaler = None
@@ -31,18 +37,16 @@ except ImportError:
                 self.categorical_features = []
 
             def load_and_clean_data(self, file_path):
-                """Mock implementation for cloud"""
                 try:
                     if hasattr(file_path, 'read'):
                         df = pd.read_csv(file_path)
                     else:
                         df = pd.read_csv(file_path)
-                    
                     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
                     df['TotalCharges'] = df['TotalCharges'].fillna(0)
                     return df.drop(columns=self.columns_to_drop, errors='ignore')
                 except Exception as e:
-                    st.warning(f"Mock loading failed: {e}")
+                    st.error(f"Error loading data: {e}")
                     return pd.DataFrame()
 
             def clean_data(self, df):
@@ -52,28 +56,24 @@ except ImportError:
                 return df_clean.drop(columns=self.columns_to_drop, errors='ignore')
 
             def preprocess_features(self, df, training=False):
-                """Mock preprocessing"""
                 df_processed = df.copy()
                 if training and 'Churn' in df_processed.columns:
                     df_processed['Churn'] = df_processed['Churn'].map({'Yes': 1, 'No': 0})
                 return df_processed, self.numeric_features, self.categorical_features
 
             def load_uploaded_file(self, uploaded_file):
-                """Mock loading uploaded file"""
                 try:
                     uploaded_file.seek(0)
                     df = pd.read_csv(uploaded_file)
                     return self.clean_data(df)
                 except Exception as e:
-                    st.error(f"Error loading file: {e}")
+                    st.error(f"Error loading uploaded file: {e}")
                     return pd.DataFrame()
 
             def save_processor(self, file_path):
-                """Mock save"""
                 pass
 
             def load_processor(self, file_path):
-                """Mock load"""
                 pass
 
 # Configuración de la página

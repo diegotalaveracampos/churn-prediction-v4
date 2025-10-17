@@ -87,15 +87,15 @@ st.set_page_config(
 # 🎯 FUNCIONES DE CARGA OPTIMIZADAS PARA CLOUD
 @st.cache_resource
 def load_model():
-    """Carga el modelo con paths compatibles con Streamlit Cloud"""
+    """Carga el modelo con paths específicos para TU repositorio"""
     try:
-        # Intenta diferentes paths posibles
+        # Rutas específicas para tu repositorio en Streamlit Cloud
         possible_paths = [
+            '/mount/src/diegotalaveracampos/churn-prediction-v2/models/best_model.pkl',
             'models/best_model.pkl',
             '../models/best_model.pkl',
             './models/best_model.pkl',
-            os.path.join(os.path.dirname(__file__), '..', 'models', 'best_model.pkl'),
-            os.path.join(os.path.dirname(__file__), 'models', 'best_model.pkl')
+            os.path.join(os.path.dirname(__file__), '..', 'models', 'best_model.pkl')
         ]
         
         model_data = None
@@ -106,17 +106,23 @@ def load_model():
                 with open(path, 'rb') as f:
                     model_data = pickle.load(f)
                 loaded_path = path
+                st.success(f"✅ Model loaded from: {path}")
                 break
-            except (FileNotFoundError, EOFError, pickle.UnpicklingError):
+            except (FileNotFoundError, EOFError, pickle.UnpicklingError) as e:
+                st.warning(f"⚠️ Failed to load from {path}: {e}")
                 continue
         
         if model_data is None:
-            st.error("❌ Model file not found in any expected location")
-            st.info("💡 Please ensure the model is trained and saved in the models/ directory")
+            st.error("""
+            ❌ Model file not found in any expected location.
+            
+            Please ensure:
+            1. The model is trained and saved as 'best_model.pkl'
+            2. The file is in the 'models/' directory
+            3. You've run: python run_project.py
+            """)
             return None
             
-        st.success(f"✅ Model loaded from: {loaded_path}")
-        
         # Asegurar que el processor esté disponible
         if 'processor' not in model_data:
             model_data['processor'] = DataProcessor()
